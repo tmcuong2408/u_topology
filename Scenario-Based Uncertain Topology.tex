@@ -1,0 +1,173 @@
+\RequirePackage{silence}
+\WarningsOff % Turn off all warnings from all packages
+\ErrorsOff   % (Caution) Use only if you are sure the code has no severe logic errors
+\documentclass[a4paper,14pt, twoside]{memoir}
+\usepackage[utf8x]{inputenc}
+\usepackage[english]{babel}    
+\usepackage{url}
+\usepackage{microtype}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amsthm}         % Provides proof environment
+\usepackage{amssymb}
+\usepackage{mathtools}     % Includes amsmath but optimized and with more features
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{autobreak}
+\usepackage{array}          % Support for notation table formatting
+\usepackage{booktabs}       % Professional table rules
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=cyan
+}
+
+% Theorem Environments
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{md}{Proposition}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{corollary}{Corollary}[chapter]
+\newtheorem{remark}{Remark}[chapter]
+\newtheorem{example}{Example}[chapter]
+
+% Declare Math Operators
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\setu}{s}
+\DeclareMathOperator{\dimU}{\dim}
+\DeclareMathOperator{\w}{w}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ucard}{ucard}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\pgr}{pgr}
+\DeclareMathOperator{\scale}{scale}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\Val}{Val}
+\DeclareMathOperator{\Conf}{Conf}
+
+% Custom commands
+\newcommand{\set}[1]{\left\{#1\right\}} % set
+\newcommand{\tbd}[1]{\mathcal{#1}} % uncertain set
+\newcommand{\s}[1]{\set{#1}_\mathrm{u}} % uncertain number
+\newcommand{\kbd}[1]{{#1}_\mathrm{u}} % uncertain interval
+\newcommand{\bd}[1]{\left(#1\right)_\mathrm{u}} % uncertain expression
+\newcommand{\tsbd}[1]{\mathbf{U}(\mathbb{#1})}
+\newcommand{\tsbdcapn}[2]{\mathbf{U^{#2}}(\mathbb{#1})}
+\newcommand{\tsbdts}[1]{\mathbf{U}_{\w}(\mathbb{#1})} % set of uncertain numbers
+\newcommand{\ddclmd}{\mathcal{V}} % truth measure of a proposition
+\newcommand{\ts}[1]{\w_{#1}} % Weight
+\newcommand{\gtcl}[2]{\left(#1\right)_{#2}} % truth measure
+\newcommand{\gr}[1]{\text{gr}(#1)} % graph of a function
+\newcommand{\hpw}[2]{#1_1\left(#2\right)} % point-wise function
+\newcommand{\hbd}[2]{#1_m\left(#2\right)} % uncertain function
+\newcommand{\eq}[1]{\left[#1\right]_{eq}} % eqs operator
+\newcommand{\kgdd}[1]{\left(#1\right)_1} % pointwise operator
+\newcommand{\kgddmr}[1]{\left(#1\right)_{1'}} % real operator
+\newcommand{\kgdt}[1]{\left(#1\right)_m} % pointwise operator
+\newcommand{\kgdtmr}[1]{\left(#1\right)_{m'}} % pointwise operator
+
+\title{Scenario-Based Uncertain Topology and Extended Logic Valuation}
+\author{
+	Tran Manh Cuong\thanks{Email: \href{mailto:tmcuong2408@gmail.com}{tmcuong2408@gmail.com} | Phone: 0353237140} \\[0.5em]
+	\small Alumnus of Faculty of Mathematics and Informatics (K11)
+	\\ Thai Nguyen University of Sciences \\
+	\small Address: DJ7 Street, Thoi Hoa, Ho Chi Minh City, Vietnam \\
+	\small \textit{Research Field: Mathematics of Uncertainty}
+}
+\date{Last updated: \today \\ \small DOI / Reference: \url{https://doi.org/10.5281/zenodo.22967037} \cite{uset}}
+
+\begin{document}
+	
+	\maketitle
+	
+	\begin{abstract}
+		This paper extends Scenario-Based Uncertain Set Theory and Extended Logic into general topology. Rather than inflating the framework with ad-hoc fuzzy membership functions or complex parameterized soft axioms, we construct Uncertain Topology directly from First Principles as a topological structure over an Uncertain Universe $X$. By evaluating structural topological statements through the Extended Logic truth valuation operator $\mathcal{V}(P)$, we establish that the assertion ``$\mathcal{T}$ is a Topology'' holds with a scenario measure $\mathcal{V} \in [0, 1]$. We prove the Topological Collapse Theorem: when the uncertain cardinalities of all open sets collapse into deterministic natural numbers ($\mathrm{ucard}(A) \in \mathbb{N}$), the uncertain topology degenerates canonical-wise into a classical static topology. Finally, we formulate a lightweight, computationally efficient metric—the Topological Uncertainty Index $\mu_U(\mathcal{T})$—which quantifies structural variation directly on cardinality domains without incurring computational noise or density estimation overhead.
+		
+		\vspace{1em}
+		\noindent Keywords: Uncertain Topology, Extended Logic, Truth Valuation, Configuration Space, Topological Collapse, Uncertain Cardinality, Scenario Measure, First Principles.
+	\end{abstract}
+	
+	\chapter{Extended Logic and Uncertain Sets Review}
+	
+	\begin{definition}[Scenario Space and Truth Valuation]
+		Let $(\Omega, \mathcal{F}, \lambda)$ be a measure space representing the scenario domain. For any structural proposition $P$, its scenario truth function is $v(P, \cdot): \Omega \to \{0, 1\}$. The global truth valuation operator $\mathcal{V}$ maps $P$ to $[0, 1]$ via:
+		\[
+		\mathcal{V}(P) := \frac{\lambda(\{\omega \in \Omega : v(P, \omega) = 1\})}{\lambda(\Omega)}
+		\]
+	\end{definition}
+	
+	\begin{definition}[Uncertain Set and Configuration Space]
+		Let $U$ be a non-empty universal set. An uncertain set $S = \{x_i : i \in I\}$ on $U$ induces a family of classical set realizations across scenarios $\omega \in \Omega$, forming its Configuration Space:
+		\[
+		\mathrm{Conf}(S) = \{ S^*(\omega) \subseteq U : \omega \in \Omega \}
+		\]
+		The uncertain cardinality $\mathrm{ucard}(S)$ is an uncertain natural number whose possibility domain is:
+		\[
+		\mathrm{Val}(\mathrm{ucard}(S)) = \{ \mathrm{card}(S^*(\omega)) : S^*(\omega) \in \mathrm{Conf}(S) \} \subseteq \mathbb{N}
+		\]
+	\end{definition}
+	
+	\chapter{Uncertain Topology via Extended Logic}
+	
+	\begin{definition}[Uncertain Open Sets and Structural Topology]
+		Let $X$ be an uncertain universal set. A collection $\mathcal{T}$ of uncertain open subsets of $X$ is called an \emph{Uncertain Topology} on $X$. For each scenario $\omega \in \Omega$, the realized collection of classical sets is denoted by $\mathcal{T}^*(\omega) \in \mathrm{Conf}(\mathcal{T})$.
+	\end{definition}
+	
+	\begin{proposition}[Extended Logic Valuation of Topological Axioms]
+		Let $\Phi(\mathcal{T})$ be the proposition asserting that $\mathcal{T}$ satisfies classical topology axioms:
+		\begin{enumerate}[label=\roman*)]
+			\item $\emptyset \in \mathcal{T}^*(\omega)$ and $X^*(\omega) \in \mathcal{T}^*(\omega)$.
+			\item Arbitrary unions of sets in $\mathcal{T}^*(\omega)$ remain in $\mathcal{T}^*(\omega)$.
+			\item Finite intersections of sets in $\mathcal{T}^*(\omega)$ remain in $\mathcal{T}^*(\omega)$.
+		\end{enumerate}
+		The structural truth degree of $\mathcal{T}$ being a topology is evaluated under Extended Logic as:
+		\[
+		\mathcal{V}(\mathcal{T} \text{ is a Topology}) = \frac{\lambda(\{\omega \in \Omega : \Phi(\mathcal{T}^*(\omega)) = 1\})}{\lambda(\Omega)} \in [0, 1]
+		\]
+		If $\mathcal{V}(\mathcal{T} \text{ is a Topology}) = 1$, $\mathcal{T}$ is said to be an Absolutely Consistent Uncertain Topology.
+	\end{proposition}
+	
+	\begin{theorem}[Topological Collapse Theorem]
+		Let $\mathcal{T}$ be an uncertain topology on $X$. If for every uncertain open set $A \in \mathcal{T}$, its uncertain cardinality possesses a singleton value domain:
+		\[
+		\mathrm{Val}(\mathrm{ucard}(A)) = \{k_A\}, \quad k_A \in \mathbb{N}
+		\]
+		then structural fluctuation across scenario space $\Omega$ vanishes completely, and $\mathcal{T}$ collapses canonically into a classical static topology.
+	\end{theorem}
+	
+	\begin{proof}
+		For each $A \in \mathcal{T}$, $\mathrm{Val}(\mathrm{ucard}(A)) = \{k_A\}$ implies that $\mathrm{card}(A^*(\omega)) = k_A$ for all scenarios $\omega \in \Omega$. Since no element realization induces cardinality expansion or state collapse, each configuration space $\mathrm{Conf}(A)$ reduces to a unique deterministic set $A^*$. Consequently, $\mathrm{Conf}(\mathcal{T})$ contains exactly one realized topology $\mathcal{T}^*$, proving that $\mathcal{T}$ collapses into a classical static topology.
+	\end{proof}
+	
+	\chapter{Topological Uncertainty Index}
+	
+	\begin{definition}[Topological Uncertainty Index]
+		Let $\mathcal{T}$ be an uncertain topology on $X$. The \emph{Topological Uncertainty Index} $\mu_U(\mathcal{T}) \in [0, 1)$ quantifies structural uncertainty directly over the cardinality domains $\mathrm{Val}(\mathrm{ucard}(A))$ of constituent open sets $A \in \mathcal{T}$:
+		\[
+		\mu_U(\mathcal{T}) = 1 - \frac{\sum_{A \in \mathcal{T}} \min \mathrm{Val}(\mathrm{ucard}(A))}{\sum_{A \in \mathcal{T}} \sum_{k \in \mathrm{Val}(\mathrm{ucard}(A))} k}
+		\]
+	\end{definition}
+	
+	\begin{proposition}[Properties of $\mu_U(\mathcal{T})$]
+		The metric $\mu_U(\mathcal{T})$ satisfies:
+		\begin{enumerate}[label=\alph*)]
+			\item $\mu_U(\mathcal{T}) = 0$ if and only if $\mathcal{T}$ collapses into a classical static topology.
+			\item $\mu_U(\mathcal{T}) \to 1$ as cardinality variability across scenarios expands infinitely.
+			\item Computation of $\mu_U(\mathcal{T})$ retains $\mathcal{O}(1)$ algorithmic complexity via Lazy Evaluation on index domains.
+		\end{enumerate}
+	\end{proposition}
+	
+	\begin{thebibliography}{9}
+		\bibitem{uset}
+		Tran, M. C. (2026). Scenario-Based Uncertain Set Theory. Zenodo. DOI: \href{https://doi.org/10.5281/zenodo.22967037}{10.5281/zenodo.22967037}.
+		\bibitem{tran2026extended}
+		Tran, M. C. (2026). \textit{Extended Logic and Mathematics of Uncertainty}. Zenodo. DOI: \href{https://doi.org/10.5281/zenodo.22031881}{10.5281/zenodo.22031881}.
+		\bibitem{mu}
+		tmcuong2408. (2026). tmcuong2408/mu: \textit{Mathematics of Uncertainty Library (Version v0.2.0)} [Computer software]. Zenodo.
+		DOI: \href{https://doi.org/10.5281/zenodo.22051784}{10.5281/zenodo.22051784}.
+	\end{thebibliography}
+	
+\end{document}
